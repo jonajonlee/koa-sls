@@ -1,0 +1,28 @@
+{
+  "name": "test-learning-path",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsc -p tsconfig.prod.json",
+    "clean": "rm -rf dist dist_test",
+    "offline": "SLS_OFFLINE=true sls offline start",
+    "test": "npm run clean && tsc -p tsconfig.test.json && STAGE=test nyc -r lcov -r text -r html --report-dir ./docs/coverage --exclude 'dist_test/test/**/*.js' ava './dist_test/test/**/*.js' -T 300000 -c 10"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/joi": "^13.4.0",
+    "@types/koa": "^2.0.46",
+    "@types/koa-router": "^7.0.31",
+    "@types/ramda": "^0.25.35",
+    "joi": "^13.5.2",
+    "koa": "^2.5.2",
+    "koa-router": "^7.4.0",
+    "ramda": "^0.25.0",
+    "serverless-http": "^1.6.0",
+    "typescript": "^3.0.1"
+  },
+  "devDependencies": {
+    "serverless-offline": "^3.25.6"
+  }
+}

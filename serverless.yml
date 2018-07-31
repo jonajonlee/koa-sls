@@ -1,0 +1,22 @@
+service: quizzes
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  environment:
+    STAGE: ${self:custom.stage}
+
+custom:
+  region: us-east-1
+  stage: ${opt:stage, self:provider.stage}
+
+plugins:
+  - serverless-offline
+
+functions:
+  app:
+    handler: dist/server.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'

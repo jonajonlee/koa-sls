@@ -1,0 +1,13 @@
+# package directories
+node_modules
+
+# Serverless directories
+.serverless
+
+# Typescript output directory
+dist/
+dist_test/
+
+# Misc
+notes/*
+notes.txt
