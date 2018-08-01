@@ -1,18 +1,21 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "ES2016",
-    "lib": ["es2016", "ScriptHost"],
-    "outDir": "dist_test",
-    "declaration": false,
-    "strict": true,
-    "noImplicitThis": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": false,
-    "removeComments": false,
-    "types": ["node"],
-    "inlineSourceMap": true,
-    "rootDir": "./"
+      "module": "commonjs",
+      "target": "ES2016",
+      "lib": ["ES2016", "ScriptHost"],
+      "outDir": "dist_test",
+      "declaration": false,
+      "strict": true,
+      "noImplicitThis": false,
+      "noUnusedLocals": true,
+      "noUnusedParameters": false,
+      "removeComments": false,
+      "types": [ "node" ],
+      "inlineSourceMap": true,
+      "rootDir": "./"
   },
-  "include": ["test/**/*.ts", "typings/index.d.ts"]
+  "include": [
+      "test/**/*.ts",
+      "typings/index.d.ts"
+  ]
 }

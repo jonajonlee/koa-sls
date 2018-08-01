@@ -4,6 +4,10 @@ node_modules
 # Serverless directories
 .serverless
 
+# Test output
+.nyc_output/
+docs/
+
 # Typescript output directory
 dist/
 dist_test/

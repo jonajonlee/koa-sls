@@ -1,16 +1,17 @@
-import KoaValidatorSchema from './types/KoaValidatorSchema';
-import { Context } from 'koa';
-
-import * as R from 'ramda';
 import * as Joi from 'joi';
+import { Context } from 'koa';
+import { evolve, isNil, isEmpty, path } from 'ramda';
+
+import objectMap from '../../util/objectMap';
 import KoaValidatorMissingSchemaError from './errors/KoaValidatorMissingSchemaError';
+import KoaValidatorSchema from './types/KoaValidatorSchema';
 
 /**
  * Returns a map of all values for each key in the schema by using
  * the path property to traverse through the context
  */
 const getValues = (schema: KoaValidatorSchema, ctx: Context) =>
-  objectMap(opt => R.path(opt.path), schema);
+  objectMap(opt => path(opt.path), schema);
 
 /**
  * Returns a map of all validators for each key in the schema
@@ -33,14 +34,14 @@ const validateCtx = (schema: KoaValidatorSchema) => (
   ctx: Context,
   next: Function
 ) => {
-  if (R.isNil(schema) || R.isEmpty(schema)) {
+  if (isNil(schema) || isEmpty(schema)) {
     throw new KoaValidatorMissingSchemaError();
   }
 
   const values = getValues(schema, ctx);
   const validator = getValidators(schema);
   const sanitizers = getSanitizers(schema);
-  const sanitized = R.evolve(sanitizers, values);
+  const sanitized = evolve(sanitizers, values);
   const validated = Joi.validate(sanitized, validator, { abortEarly: false });
 
   if (validated.error) {
