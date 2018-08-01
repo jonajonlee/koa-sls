@@ -1,7 +1,7 @@
 {
-  "name": "test-learning-path",
+  "name": "base-koa-sls-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "base koa serverless application to model future apis from",
   "scripts": {
     "build": "tsc -p tsconfig.prod.json",
     "build-test": "tsc -p tsconfig.test.json",
