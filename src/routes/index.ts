@@ -8,7 +8,7 @@ const sysRouter = SysRouter();
 const mainRouter = new KoaRouter();
 
 // Add any nested routes here
-mainRouter.get('/', (ctx) => ctx.body = 'Main Page: "/"');
+mainRouter.get('/', ctx => (ctx.body = 'Main Page: "/"'));
 mainRouter.use('/sys', sysRouter.routes(), sysRouter.allowedMethods());
 
 export default (app: Koa, router: KoaRouter = mainRouter) => {
