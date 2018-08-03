@@ -1,4 +1,4 @@
-service: quizzes
+service: koa-sls
 
 provider:
   name: aws

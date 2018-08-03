@@ -12,6 +12,9 @@ docs/
 dist/
 dist_test/
 
+# database
+data/
+
 # Misc
 notes/*
 notes.txt

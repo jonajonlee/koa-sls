@@ -1,0 +1,25 @@
+version: '3'
+services:
+  koa-sls:
+    build: .
+    image: base-koa-sls
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./docs:/app/docs
+    links:
+      - db
+    environment:
+      AWS_ACCESS_KEY_ID:
+      AWS_REGION:
+      AWS_SECRET_ACCESS_KEY:
+      REPO: base-koa-sls
+      SLS_OFFLINE:
+  db:
+    image: postgres:9.5.9
+    ports:
+      - "4432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword

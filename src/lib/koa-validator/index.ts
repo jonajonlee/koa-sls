@@ -11,7 +11,7 @@ import KoaValidatorSchema from './types/KoaValidatorSchema';
  * the path property to traverse through the context
  */
 const getValues = (schema: KoaValidatorSchema, ctx: Context) =>
-  objectMap(opt => path(opt.path), schema);
+  objectMap(opt => path(opt.path, ctx), schema);
 
 /**
  * Returns a map of all validators for each key in the schema

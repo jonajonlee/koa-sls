@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "base koa serverless application to model future apis from",
   "scripts": {
-    "build": "tsc -p tsconfig.prod.json",
+    "build-container": "docker-compose build",
     "build-test": "tsc -p tsconfig.test.json",
+    "build": "tsc -p tsconfig.prod.json",
     "clean": "rm -rf dist dist_test",
     "lint": "prettier -l '{src,test}/**/*.ts'",
     "offline": "npm run build && SLS_OFFLINE=true sls offline start",
+    "test-container": "docker-compose run koa-sls npm test",
     "test": "npm run build-test && STAGE=test nyc -r lcov -r text -r html --report-dir ./docs/coverage --exclude 'dist_test/test/**/*.js' ava './dist_test/test/**/*.js' -T 300000 -c 10"
   },
   "ava": {
@@ -31,7 +33,7 @@
     "@types/koa": "^2.0.46",
     "@types/koa-bodyparser": "^5.0.1",
     "@types/koa-router": "^7.0.31",
-    "@types/ramda": "^0.25.35",
+    "@types/ramda": "0.25.8",
     "ava": "^0.25.0",
     "nyc": "^12.0.2",
     "prettier": "^1.14.0",
