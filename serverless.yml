@@ -5,6 +5,11 @@ provider:
   runtime: nodejs8.10
   stage: dev
   environment:
+    MYSQL_DATABASE: ${ssm:/base-koa-sls/dev/mysql_database}
+    MYSQL_HOST: ${ssm:/base-koa-sls/dev/mysql_host}
+    MYSQL_PASSWORD: ${ssm:/base-koa-sls/dev/mysql_password}
+    MYSQL_PORT: ${ssm:/base-koa-sls/dev/mysql_port}
+    MYSQL_USERNAME: ${ssm:/base-koa-sls/dev/mysql_username}
     STAGE: ${self:custom.stage}
 
 custom:
@@ -16,7 +21,8 @@ plugins:
 
 functions:
   app:
-    handler: dist/server.handler
+    handler: dist/server/index.handler
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
+    reservedConcurrency: 100 # max amount of concurrent lambda
