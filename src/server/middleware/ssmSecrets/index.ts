@@ -1,12 +1,13 @@
 import { SSM } from 'aws-sdk';
 import { Context } from 'koa';
 import objectMap from '../../../util/objectMap';
+import SsmSecretsMiddlewareError from './SsmSecretsMiddlewareError';
 
 type Secrets = Record<string, string>;
 
-const SECRETS: Secrets = {
+export const SECRETS: Secrets = {
   MYSQL_DATABASE: '/base-koa-sls/dev/mysql_database',
-  MYSQL_HOST: '/base-koa-sls/dev/mysql_host',
+  MYSQL_HOST: '/base-koa-sls/dev/mysql_hostasdfsadf',
   MYSQL_PASSWORD: '/base-koa-sls/dev/mysql_password',
   MYSQL_PORT: '/base-koa-sls/dev/mysql_port',
   MYSQL_USERNAME: '/base-koa-sls/dev/mysql_username'
@@ -23,9 +24,9 @@ interface IConfig {
  * inject them into the Koa Context
  */
 export default class SsmSecretsMiddleware {
-  private prefix: string = '';
-  private secrets: Secrets = SECRETS;
-  private ssm: SSM;
+  prefix: string = '';
+  secrets: Secrets = SECRETS;
+  ssm: SSM;
 
   constructor(config?: IConfig) {
     this.ssm = (config && config.ssm) || new SSM();
@@ -77,6 +78,16 @@ export default class SsmSecretsMiddleware {
     return objectMap(secret => ssmParamMap[secret], this.secrets);
   };
 
+  hasMissingSecret = (secrets: Secrets) => {
+    Object.keys(secrets).forEach(key => {
+      if (!secrets[key]) {
+        return false;
+      }
+    });
+
+    return true;
+  };
+
   /**
    * A Koa Middleware function to extract properties from SSM Parameter Store
    * and inject them into the ctx state
@@ -92,11 +103,19 @@ export default class SsmSecretsMiddleware {
     return this.ssm
       .getParameters(opts)
       .promise()
-      .then(ssmResult => {
-        ctx.state.secrets = this.extractSecrets(ssmResult);
+      .then(this.extractSecrets)
+      .then(secrets => {
+        if (this.hasMissingSecret(secrets)) {
+          throw new SsmSecretsMiddlewareError('Missing SSM Secrets');
+        }
+        return secrets;
+      })
+      .then(secrets => {
+        ctx.state.secrets = secrets;
         next();
       })
       .catch(e => {
+        // TODO: send rollbar error here
         console.error(e);
         ctx.status = 500;
         ctx.body = 'Unable to get secrets';
